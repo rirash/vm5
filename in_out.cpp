@@ -2,9 +2,10 @@
 #include "Processor.h"
 #include "in_out.h"
 
+//Р’Р’РћР”/Р’Р«Р’РћР”
 void IO::operator()(Processor& cpu) noexcept
 {
-	enum io_mode : uint8_t
+	enum io_mode : uint8_t 		//Р§С‚Рѕ РґРµР»Р°РµРј? Р’РІРѕРґРёРј/РІС‹РІРѕРґРёРј С†РµР»С‹Рµ/РІРµС‰РµСЃС‚РІРµРЅРЅС‹Рµ
 	{
 		in_i = 0,
 		in_ui = 1,
@@ -15,17 +16,17 @@ void IO::operator()(Processor& cpu) noexcept
 	};
 
 	cmd32 com = cpu.get_Command();
-	//Режим ввода/вывода определяем по содержимому второго регистра
+	//Р РµР¶РёРј РІРІРѕРґР°/РІС‹РІРѕРґР° РѕРїСЂРµРґРµР»СЏРµРј РїРѕ РІС‚РѕСЂРѕРјСѓ РѕРїРµСЂР°РЅРґСѓ
 	uint16_t mode = cpu.get_int16(com.command16.r2);
 	uint8_t s = com.command16.s;
-	if (s == 0)//Говорим от коротких данных
+	if (s == 0)			//Р•СЃР»Рё РёРјРµРµРј РґРµР»Рѕ СЃ 16-Р±РёС‚РЅС‹РјРё РґР°РЅРЅС‹РјРё
 	{
 		switch (mode)
 		{
 		case in_i:
 		{
 			datatype16 val;
-			std::cout << "\nВведите короткое целое знаковое число: "; std::cin >> val.w16.i16;
+			std::cout << "\nР’РІРµРґРёС‚Рµ РєРѕСЂРѕС‚РєРѕРµ С†РµР»РѕРµ Р·РЅР°РєРѕРІРѕРµ С‡РёСЃР»Рѕ: "; std::cin >> val.w16.i16;
 			cpu.put(val, com.command16.r1);
 			break;
 		}
@@ -33,7 +34,7 @@ void IO::operator()(Processor& cpu) noexcept
 		case in_ui:
 		{
 			datatype16 val;
-			std::cout << "\nВведите короткое целое беззнаковое число: "; std::cin >> val.w16.ui16;
+			std::cout << "\nР’РІРµРґРёС‚Рµ РєРѕСЂРѕС‚РєРѕРµ С†РµР»РѕРІРµ Р±РµР·Р·РЅР°РєРѕРІРѕРµ С‡РёСЃР»Рѕ: "; std::cin >> val.w16.ui16;
 			cpu.put(val, com.command16.r1);
 			break;
 		}
@@ -49,14 +50,14 @@ void IO::operator()(Processor& cpu) noexcept
 		}
 		}
 	}
-	else//Говорим о длинных
+	else				//Р•СЃР»Рё РёРјРµРµРј РґРµР»Рѕ СЃ 32-Р±РёС‚РЅС‹РјРё РґР°РЅРЅС‹РјРё
 	{
 		switch (mode)
 		{
 		case in_i:
 		{
 			datatype32 val;
-			std::cout << "\nВведите длинное целое знаковое число: "; std::cin >> val.w32.i32;
+			std::cout << "\nР’РІРµРґРёС‚Рµ РґР»РёРЅРЅРѕРµ С†РµР»РѕРµ Р·РЅР°РєРѕРІРѕРµ С‡РёСЃР»Рѕ: "; std::cin >> val.w32.i32;
 			cpu.put(val, com.command16.r1);
 			break;
 		}
@@ -64,7 +65,7 @@ void IO::operator()(Processor& cpu) noexcept
 		case in_ui:
 		{
 			datatype32 val;
-			std::cout << "\nВведите длинное целое беззнаковое число: "; std::cin >> val.w32.ui32;
+			std::cout << "\nР’РІРµРґРёС‚Рµ РґР»РёРЅРЅРѕРµ С†РµР»РѕРµ Р±РµР·Р·РЅР°РєРѕРІРѕРµ С‡РёСЃР»Рѕ: "; std::cin >> val.w32.ui32;
 			cpu.put(val, com.command16.r1);
 			break;
 		}
@@ -72,7 +73,7 @@ void IO::operator()(Processor& cpu) noexcept
 		case in_f:
 		{
 			datatype32 val;
-			std::cout << "\nВведите вещественное число: "; std::cin >> val.w32.f;
+			std::cout << "\nР’РІРµРґРёС‚Рµ РІРµС‰РµСЃС‚РІРµРЅРЅРѕРµ С‡РёСЃР»Рѕ: "; std::cin >> val.w32.f;
 			cpu.put(val, com.command16.r1);
 			break;
 		}
