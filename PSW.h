@@ -5,29 +5,29 @@
 class PSW
 {
 private:
-    uint16_t IP : 16;                                   //IP-адрес
-    uint16_t ZF : 1;                                    //Флаг нуля
-    uint16_t SF : 1;                                    //Флаг знака
-    uint16_t reserved : 14;                             //Резерв
+    uint16_t IP : 16;                                   //IP-Р°РґСЂРµСЃ
+    uint16_t ZF : 1;                                    //Р¤Р»Р°Рі РЅСѓР»СЏ
+    uint16_t SF : 1;                                    //Р¤Р»Р°Рі Р·РЅР°РєР°
+    uint16_t reserved : 14;                             //Р РµР·РµСЂРІ
 public:
     PSW() : IP(0), ZF(0), SF(0) {};
-    uint16_t getIP() const noexcept { return IP; }      //Получить значение IP
-    uint8_t getZF() const noexcept { return ZF; }       //Получить значение ZF
-    uint8_t getSF() const noexcept { return SF; }       //Получить значение SF
+    
+    uint16_t getIP() const noexcept { return IP; }      //Р’С‹РіСЂСѓР¶Р°РµРј Р·РЅР°С‡РµРЅРёРµ IP
+    uint8_t getZF() const noexcept { return ZF; }       //Р’С‹РіСЂСѓР¶Р°РµРј Р·РЅР°С‡РµРЅРёРµ ZF
+    uint8_t getSF() const noexcept { return SF; }       //Р’С‹РіСЂСѓР¶Р°РµРј Р·РЅР°С‡РµРЅРёРµ SF
 
-    void setIP(uint16_t adr) noexcept { IP = adr; }     //Положить значение IP
-    void setZF(int16_t val) noexcept                    //Положить значение ZF
+    void setIP(uint16_t adr) noexcept { IP = adr; }     //РљР»Р°РґРµРј Р·РЅР°С‡РµРЅРёРµ IP
+    void setZF(int16_t val) noexcept                    //РљР»Р°РґРµРј Р·РЅР°С‡РµРЅРёРµ ZF
     {
         if (val == 0) ZF = 0;
         else ZF = 1;
     }
-    void setSF(int16_t val) noexcept                    //Положить значение SF
+    void setSF(int16_t val) noexcept                    //РљРєР»Р°РґРµРј Р·РЅР°С‡РµРЅРёРµ SF
     {
         if (val == 0) SF = 0;
         else SF = 1;
     }
 
-    void resetFlags() noexcept { ZF = 0; SF = 0; }      //Обнулим флаги
+    void resetFlags() noexcept { ZF = 0; SF = 0; }      //РћС‡РёС‰Р°РµРј С„Р»Р°РіРё
 };
-
 #endif // PSW_H
