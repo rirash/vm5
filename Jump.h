@@ -3,35 +3,31 @@
 #include "Command.h"
 #include "Processor.h"
 
-class Stop : public Command
-{
-	void operator()(Processor& cpu) noexcept override { cpu.put_IF(1); }
-};
-
-class Jmp : public Command
+class Jmp : public Command 								//РџСЂСЏРјРѕР№ Р±РµР·СѓСЃР»РѕРІРЅС‹Р№ РїРµСЂРµС…РѕРґ
 {
 public:
 	void go_to(Processor& cpu) noexcept
 	{
 		cmd32 com = cpu.get_Command();
-		uint16_t adress;//Новый адрес
-		//Пусть в первом операнде находится "метод" составления адреса
+		uint16_t adress;							//РЎРѕСЃС‚Р°РІРЅРѕР№ Р°РґСЂРµСЃ, РєСѓРґР° РїСЂС‹РіР°РµРј
+		//РџРѕ Р·РЅР°С‡РµРЅРёСЋ, Р»РµР¶Р°С‰РµРјСѓ РІ РїРµСЂРІРѕРј РѕРїРµСЂР°РЅРґРµ РѕРїСЂРµРґРµР»СЏРµРј СЃРїРѕСЃРѕР± РѕРїСЂРµРґРµР»РµРЅРёСЏ Р°РґСЂРµСЃР°
 		switch (cpu.get_int16(com.command16.r1))
 		{
-		case 0: adress = cpu.get_int16(com.command16.r2); break; //Адрес в r2
-		case 1: adress = cpu.get_int16(com.command16.r2) + com.off; break;//Адрес = адрес в r2 + offset
-		case 2: adress = com.off;//Адрес = offset
+		case 0: adress = cpu.get_int16(com.command16.r2); break; 		//РђРґСЂРµСЃ Р»РµР¶РёС‚ РІ r2
+		case 1: adress = cpu.get_int16(com.command16.r2) + com.off; break;	//РђРґСЂРµСЃ = Р°РґСЂРµСЃ РІ r2 + СЃРјРµС‰РµРЅРёРµ
+		case 2: adress = com.off;						//РђРґСЂРµСЃ = СЃРјРµС‰РµРЅРёСЋ
 		}
 
-		if (com.command16.s == 0)//прямой переход
-			cpu.psw.setIP(adress); //ip = адрес
-		else                      //относительный переход
-			cpu.psw.setIP(cpu.psw.getIP() + adress); //ip += адрес
+		if (com.command16.s == 0)						//Р’РѕРѕР±С‰Рµ, СЂР°Р·РјРµСЂ С†РµР»РѕРіРѕ РѕРїРµСЂР°РЅРґР°. РЎРµР№С‡Р°СЃ Р¶Рµ - СЃРїРѕСЃРѕР± РѕРїСЂРµРґРµР»РµРЅРёСЏ РїРµСЂРµС…РѕРґР°
+			cpu.psw.setIP(adress); 						//РџСЂСЏРјРѕР№
+		else
+			cpu.psw.setIP(cpu.psw.getIP() + adress); 			//РћС‚РЅРѕСЃРёС‚РµР»СЊРЅС‹Р№
 	}
 
 	void operator()(Processor& cpu) noexcept override { go_to(cpu); }
 };
 
+//РЈРЎР›РћР’РќР«Р• РџР•Р Р•РҐРћР”Р«
 class JmpZF : public Jmp
 {
 	void operator()(Processor& cpu) noexcept override
@@ -64,15 +60,16 @@ class JmpNSF : public Jmp
 	}
 };
 
+//РџР•Р Р•РҐРћР”/Р’РћР—Р’Р РђРў
 class Call : public Jmp
 {
 	void operator()(Processor& cpu) noexcept
 	{
-		cmd32 com = cpu.get_Command(); //Вытаскиваем и разбираем команду
+		cmd32 com = cpu.get_Command(); 						//Р’С‹С‚Р°СЃРєРёРІР°РµРј Рё СЂР°Р·Р±РёСЂР°РµРј РєРѕРјР°РЅРґСѓ
 		datatype16 t16; 
-		t16.w16.i16 = cpu.psw.getIP();//Сохраняем ip
-		cpu.put(t16, com.command16.r1);//в первый операнд
-		cpu.psw.setIP(cpu.get_uint16(com.command16.r2));//меняем ip на адрес во втором
+		t16.w16.i16 = cpu.psw.getIP();						//Р—Р°РїРѕРјРёРЅР°РµРј Р°РґСЂРµСЃ РІРѕР·РІСЂР°С‚Р°
+		cpu.put(t16, com.command16.r1);
+		cpu.psw.setIP(cpu.get_uint16(com.command16.r2));			//РџСЂС‹РіР°РµРј РїРѕ РЅРѕРІРѕРјСѓ Р°РґСЂРµСЃСѓ
 	}
 };
 
@@ -80,8 +77,8 @@ class Return : public Jmp
 {
 	void operator()(Processor& cpu) noexcept
 	{
-		cmd32 com = cpu.get_Command();//вытаскиваем и разбираем команду
-		cpu.psw.setIP(cpu.get_uint16(com.command16.r1));//вытаскиваем адрес возврата
+		cmd32 com = cpu.get_Command();						//Р Р°Р·Р±РёСЂР°РµРј РєРѕРјР°РЅРґСѓ
+		cpu.psw.setIP(cpu.get_uint16(com.command16.r1));			//Р’РѕР·РІСЂР°С‰Р°РµРјСЃСЏ РїРѕ СЃС‚Р°СЂРѕРјСѓ IP
 	}
 };
 
