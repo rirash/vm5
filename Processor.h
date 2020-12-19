@@ -10,14 +10,13 @@
 class Processor
 {
 private:
-	datatype32 cmd;
-	Command* command[23];
-	bool JF;
-	bool IF;
+	datatype32 cmd; 					//Текущая команда
+	Command* command[23];					//Массив команд
+	bool JF;						//Был ли прыжок?
 public:
 	PSW psw;
 	Memory memory;
-	ROH reg[4];
+	ROH reg[4];						//Регистры общего назначения (8 регитров по 16 бит объеденены в 4 по 32 бита)
 
 	Processor();
 
@@ -28,8 +27,8 @@ public:
 
 	inline cmd32 get_Command() const noexcept { return cmd.command32; }
 	void put_JF(bool val) noexcept { JF = val; }
-	void put_IF(bool val) noexcept { IF = val; }
 
+	//Получаем значения из регистров
 	int16_t get_int16(uint16_t num_reg) const;
 	uint16_t get_uint16(uint16_t num_reg) const;
 	int32_t get_int32(uint16_t num_reg) const;
@@ -38,9 +37,9 @@ public:
 	void put(datatype16 val, uint16_t num_reg);
 	void put(datatype32 val, uint16_t num_reg);
 
-	void load_Command() noexcept;
-	void reset() noexcept;
-	void debug() const noexcept;
-	void run() noexcept;
+	void load_Command() noexcept;				//Загрузка текущей команды
+	void reset() noexcept;					//Очистка всего и вся...)
+	void debug() const noexcept;				//Дебаг
+	void run() noexcept;					//Выполнение программы
 };
 #endif//! PROCESSOR_H
