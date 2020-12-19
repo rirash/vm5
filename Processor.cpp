@@ -38,9 +38,9 @@ Processor::Processor()
 	command[call] = new Call();
 	command[ret] = new Return();
 
+	//Все очищаем
 	JF = false;
-	IF = false;
-
+	
 	psw.setIP(0);
 	psw.setSF(0);
 	psw.setZF(0);
@@ -48,15 +48,16 @@ Processor::Processor()
 	cmd.w32.i32 = 0;
 }
 
-void Processor::load_Command() noexcept
+void Processor::load_Command() noexcept 			//Загрузка команды из памяти
 {
+	//Команда загружается в 32-битную команду, вне зависимости от того, используется ли ее часть или же она вся
 	cmd.t16[0].i16 = memory.get_int16(psw.getIP());
 	uint8_t kop = get_Command().command16.KOP;
-	if ((kop < 4 && kop > 1) || (kop < 23 && kop > 17))
+	if ((kop < 4 && kop > 1) || (kop < 23 && kop > 17)) 	//Команды с этими КОП - 4 байтные, поэтому занимают два слова
 		cmd.t16[1].i16 = memory.get_int16(psw.getIP() + 1);
 }
 
-void Processor::reset() noexcept
+void Processor::reset() noexcept				//Очистка флагов, регистров
 {
 	psw.setIP(0);
 	psw.setSF(0);
@@ -65,29 +66,29 @@ void Processor::reset() noexcept
 	JF = 0;
 }
 
-void Processor::debug() const noexcept
+void Processor::debug() const noexcept				//Дебаг
 {
 	cmd32 com = get_Command();
-	std::cout << "\n����������� �������: ���:" << com.command16.KOP << " s:" <<
+	std::cout << "\nВыполняемая команда: КОП:" << com.command16.KOP << " s:" <<
 		com.command16.s << " r1:" << com.command16.r1 << " r2:" << com.command16.r2
 		<< " offset:" << com.off << " flags:" << (int)psw.getZF() << " "
 		<< (int)psw.getSF() << " IP:" << psw.getIP() << "\n";
 }
 
-void Processor::run() noexcept
+void Processor::run() noexcept					//Выполнение программы
 {
-	load_Command();
+	load_Command();						//Загружаем первую команду
 	debug();
 	cmd32 com = get_Command();
-	while (com.command16.KOP != stop)
+	while (com.command16.KOP != stop)			//Пока КОП != 0
 	{
 		debug();
 		uint8_t kop = get_Command().command16.KOP;
-		command[kop]->operator()(*this);
-		if (!JF) 
-			if ((kop < 4 && kop > 1) || (kop < 23 && kop > 17))
+		command[kop]->operator()(*this); 		//Выполняем операцию
+		if (!JF) 					//"Прыжки" сами выставляют IP
+			if ((kop < 4 && kop > 1) || (kop < 23 && kop > 17)) 	//Ппроверка на 2-х или 4-х байтную команду
 				psw.setIP(psw.getIP() + 2);
 			else psw.setIP(psw.getIP() + 1);
-		load_Command();
+		load_Command();					//Загрузка новой команды
 	}
 }
