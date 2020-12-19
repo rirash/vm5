@@ -17,7 +17,7 @@ public:
     { 
         memory[adr].w16 = elem.w16; 
     }
-    void load(const datatype32& elem, uint16_t adr) noexcept //Çŕăđóçęŕ â ďŕě˙ňü äâîéíîăî ńëîâŕ
+    void load(const datatype32& elem, uint16_t adr) noexcept
     {
         memory[adr].w16 = elem.t16[0];
         memory[adr + 1].w16 = elem.t16[1];
