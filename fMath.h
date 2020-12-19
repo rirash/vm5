@@ -4,6 +4,7 @@
 #include "Struct.h"
 #include "Command.h"
 
+//–í–ï–©–ï–°–¢–í–ï–ù–ù–ê–Ø –ê–†–ò–§–ú–ï–¢–ò–ö–ê
 class fMath : public Command
 {
 	void change_flag(datatype32 res, Processor& cpu) noexcept;
@@ -30,7 +31,7 @@ class fDiv : public fMath
 {
 	float calculate(float left, float right)
 	{ 
-		if (fabs(right) < 0.000000001) throw std::invalid_argument("ƒÂÎÂÌËÂ Ì‡ ÌÓÎ¸ ÌÂ‚ÓÁÏÓÊÌÓ!");
+		if (fabs(right) < 0.000000001) throw std::invalid_argument("–î–µ–ª–µ–Ω–∏–µ –Ω–∞ –Ω–æ–ª—å –Ω–µ–≤–æ–∑–º–æ–∂–Ω–æ!");
 		return left / right; 
 	}
 };
