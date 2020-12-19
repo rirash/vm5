@@ -3,11 +3,12 @@
 #include "Struct.h"
 #include "Command.h"
 
+//ЦЕЛОЧИСЛЕННАЯ АРИФМЕТИКА
 class iMath : public Command
 {
-	void change_flag(datatype32 res, Processor& cpu) noexcept;
-	void change_flag(datatype16 res, Processor& cpu) noexcept;
-	virtual int32_t calculate(int32_t left, int32_t right) = 0;
+	void change_flag(datatype32 res, Processor& cpu) noexcept; 	//Расстановка флагов
+	void change_flag(datatype16 res, Processor& cpu) noexcept;	//Расстановка флагов
+	virtual int32_t calculate(int32_t left, int32_t right) = 0;	//Непосредственно операция
 	void operator()(Processor& cpu);
 };
 
@@ -30,7 +31,7 @@ class iDiv : public iMath
 {
 	virtual int32_t calculate(int32_t left, int32_t right)
 	{ 
-		if (right == 0) throw std::invalid_argument("������� �� ���� ����������!");
+		if (right == 0) throw std::invalid_argument("Деление на ноль невозможно!");
 		return left / right; 
 	}
 };
