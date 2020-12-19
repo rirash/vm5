@@ -4,7 +4,7 @@
 class Memory
 {
 private:
-    datatype16* memory;                                        //Наша память
+    datatype16* memory;                                                                 //РџР°РјСЏС‚СЊ СЃРѕСЃС‚РѕРёС‚ РёР· СЃР»РѕРІ (16-Р±РёС‚РЅР°СЏ РєРѕРјР°РЅРґР° РёР»Рё Р¶Рµ 16-Р±РёС‚РЅР°СЏ РїРµСЂРµРјРµРЅРЅР°СЏ)
 public:
     Memory() { memory = new datatype16[65536]; }
     Memory(Memory&) = delete;
@@ -12,33 +12,33 @@ public:
 
     ~Memory() { delete[] memory; }
 
-    //Загрузка в память слова
+    //Р—Р°РіСЂСѓР·РєР° РІ РїР°РјСЏС‚СЊ РґРІСѓС… РІРёРґРѕРІ С‚РёРїРѕРІ РґР°РЅРЅС‹С…
     void load(const datatype16& elem, uint16_t adr) noexcept 
     { 
         memory[adr].w16 = elem.w16; 
     }
-    void load(const datatype32& elem, uint16_t adr) noexcept //Загрузка в память двойного слова
+    void load(const datatype32& elem, uint16_t adr) noexcept //Г‡Е•ДѓД‘ГіГ§Д™Е• Гў ДЏЕ•Д›Л™Е€Гј Г¤ГўГ®Г©Г­Г®ДѓГ® Е„Г«Г®ГўЕ•
     {
         memory[adr].w16 = elem.t16[0];
         memory[adr + 1].w16 = elem.t16[1];
     }
 
-    int16_t get_int16(uint16_t adr) const noexcept { return memory[adr].w16.i16; }   //Получение целого 16-битного знакового числа
-    uint16_t get_uint16(uint16_t adr) const noexcept { return memory[adr].w16.ui16; }  //Получение целого 16-битного беззнакового числа
-    int32_t get_int32(uint16_t adr) const noexcept                           //Получение целого 32-битного знакового числа
+    int16_t get_int16(uint16_t adr) const noexcept { return memory[adr].w16.i16; }      //РџРѕР»СѓС‡Р°РµРј С†РµР»РѕРµ Р·РЅР°РєРѕРІРѕРµ 16-Р±РёС‚РЅРѕРµ Р·РЅР°С‡РµРЅРёРµ РёР· РїР°РјСЏС‚Рё
+    uint16_t get_uint16(uint16_t adr) const noexcept { return memory[adr].w16.ui16; }   //РџРѕР»СѓС‡Р°РµРј С†РµР»РѕРµ Р±РµР·Р·РЅР°РєРѕРІРѕРµ 16-Р±РёС‚РЅРѕРµ Р·РЅР°С‡РµРЅРёРµ РёР· РїР°РјСЏС‚Рё
+    int32_t get_int32(uint16_t adr) const noexcept                                      //РџРѕР»СѓС‡Р°РµРј С†РµР»РѕРµ Р·РЅР°РєРѕРІРѕРµ 32-Р±РёС‚РЅРѕРµ Р·РЅР°С‡РµРЅРёРµ РёР· РїР°РјСЏС‚Рё
     {
         datatype32 t32;
         t32.t16[0] = memory[adr].w16;
         t32.t16[1] = memory[adr + 1].w16;
         return t32.w32.i32;
     }
-    uint32_t get_uint32(uint16_t adr) const noexcept         //Получение целого 32-битного беззнакового числа
+    uint32_t get_uint32(uint16_t adr) const noexcept                                    //РџРѕР»СѓС‡Р°РµРј С†РµР»РѕРµ Р±РµР·Р·РЅР°РєРѕРІРѕРµ 32-Р±РёС‚РЅРѕРµ Р·РЅР°С‡РµРЅРёРµ РёР· РїР°РјСЏС‚Рё
     {
         datatype32 t32;
         t32.w32.i32 = get_int32(adr);
         return t32.w32.ui32;
     }
-    float get_float(uint16_t adr) const noexcept             //Получение вещетвенного числа
+    float get_float(uint16_t adr) const noexcept                                        //РџРѕР»СѓС‡Р°РµРј РІРµС‰РµСЃС‚РІРµРЅРЅРѕРµ Р·РЅР°С‡РµРЅРёРµ РёР· РїР°РјСЏС‚Рё
     {
         datatype32 t32;
         t32.w32.i32 = get_int32(adr);
